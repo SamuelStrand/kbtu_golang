@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: practice4-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - practice-net
+
+  web-app:
+    container_name: practice4-web-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_ADDR: ":8080"
+      API_KEY: ${API_KEY}
+
+      PG_HOST: db
+      PG_PORT: "5432"
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      PG_DB: ${PG_DB}
+      PG_SSLMODE: "disable"
+    networks:
+      - practice-net
+
+networks:
+  practice-net:
+    name: practice-net
+    driver: bridge
+
+volumes:
+  db_data:

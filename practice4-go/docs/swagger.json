@@ -1,0 +1,148 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Practice 4 Users API",
+    "version": "1.0.0"
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Healthcheck",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get users",
+        "parameters": [
+          { "name": "limit", "in": "query", "schema": { "type": "integer" } },
+          { "name": "offset", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "post": {
+        "summary": "Create user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Get user by id",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "put": {
+        "summary": "Update user",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "patch": {
+        "summary": "Patch user",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserPatch" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "delete": {
+        "summary": "Soft delete user",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-KEY"
+      }
+    },
+    "schemas": {
+      "UserCreate": {
+        "type": "object",
+        "required": ["name", "email", "age"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "age": { "type": "integer" }
+        }
+      },
+      "UserPatch": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "age": { "type": "integer" }
+        }
+      }
+    }
+  }
+}
