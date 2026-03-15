@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: practice5-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: practice5
+    ports:
+      - "5432:5432"
+    volumes:
+      - practice5_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d practice5"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+
+volumes:
+  practice5_db_data:

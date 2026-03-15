@@ -1,0 +1,82 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  title: Practice5 API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      responses: {}
+      summary: Health
+      tags:
+      - health
+  /users:
+    get:
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      - description: order_by
+        in: query
+        name: order_by
+        type: string
+      - description: order_dir
+        in: query
+        name: order_dir
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: gender
+        in: query
+        name: gender
+        type: string
+      - description: birth_date
+        in: query
+        name: birth_date
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+      summary: GetUsers
+      tags:
+      - users
+  /users/common-friends:
+    get:
+      parameters:
+      - description: user1
+        in: query
+        name: user1
+        required: true
+        type: string
+      - description: user2
+        in: query
+        name: user2
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+      summary: GetCommonFriends
+      tags:
+      - users
+swagger: "2.0"
