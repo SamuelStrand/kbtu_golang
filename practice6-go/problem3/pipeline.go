@@ -42,7 +42,6 @@ func FanIn(ctx context.Context, channels ...<-chan string) <-chan string {
 					if !ok {
 						return
 					}
-					// Forward to output, but still respect ctx cancellation.
 					select {
 					case <-ctx.Done():
 						return
